@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive World Map</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            background-color: #aaddf0; /* Ocean color */
+        }
+
+        #map-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* SVG Styles */
+        svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .country {
+            fill: #e8e3d3;
+            stroke: #999;
+            stroke-width: 0.5px;
+            vector-effect: non-scaling-stroke; /* Keeps stroke width constant on zoom */
+            cursor: crosshair;
+            transition: fill 0.2s;
+        }
+
+        .country:hover {
+            fill: #dcd6c0;
+        }
+
+        /* Marker Animation */
+        .marker {
+            fill: #dc3545; /* Bootstrap danger red */
+            stroke: #fff;
+            stroke-width: 2px;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
+            animation: dropIn 0.3s ease-out;
+            cursor: pointer;
+        }
+
+        @keyframes dropIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Floating Info Badge (optional hint) */
+        .info-hint {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map-container">
+        <div class="info-hint text-secondary">Click anywhere to place a marker</div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="locationOffcanvas" aria-labelledby="offcanvasLabel">
+        <div class="offcanvas-header bg-primary text-white">
+            <h5 class="offcanvas-title" id="offcanvasLabel">Location Details</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="alert alert-info">
+                <strong>Coordinates Selected</strong>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-muted">Latitude</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-geo-alt"></i> Lat</span>
+                    <input type="text" class="form-control" id="lat-val" readonly>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-muted">Longitude</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-geo"></i> Lon</span>
+                    <input type="text" class="form-control" id="lon-val" readonly>
+                </div>
+            </div>
+
+            <hr>
+            <p class="small text-muted">
+                These coordinates are generated based on the projection of the click event on the SVG map.
+            </p>
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-danger" id="clear-marker">Remove Marker</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Configuration
+            const container = d3.select("#map-container");
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // 1. Setup SVG
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [0, 0, width, height]);
+
+            // Group for map features (to apply zoom)
+            const g = svg.append("g");
+
+            // 2. Projection & Path
+            // Mercator projection fitted to the window size
+            const projection = d3.geoMercator()
+                .scale(width / 2 / Math.PI) // Heuristic scale for full width
+                .translate([width / 2, height / 1.5]); // Shift map slightly down to center standard view
+
+            const path = d3.geoPath().projection(projection);
+
+            // 3. Zoom Behavior
+            const zoom = d3.zoom()
+                .scaleExtent([1, 8]) // Zoom levels: 1x to 8x
+                .on("zoom", (event) => {
+                    g.attr("transform", event.transform);
+                    // Keep marker size consistent visually (inverse scale)
+                    g.selectAll(".marker").attr("r", 8 / event.transform.k);
+                    g.selectAll(".country").attr("stroke-width", 0.5 / event.transform.k);
+                });
+
+            svg.call(zoom);
+
+            // 4. Load Data & Render
+            // Using a CDN for 110m resolution world map (lightweight)
+            d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world => {
+                
+                // Convert TopoJSON to GeoJSON
+                const countries = topojson.feature(world, world.objects.countries);
+
+                // Draw Countries
+                g.selectAll("path")
+                    .data(countries.features)
+                    .enter().append("path")
+                    .attr("class", "country")
+                    .attr("d", path)
+                    .attr("id", d => `country-${d.id}`); // Optional ID
+                
+            }).catch(err => console.error("Error loading map data:", err));
+
+            // 5. Interaction: Click to add marker
+            svg.on("click", function(event) {
+                // If we clicked on the marker itself, ignore (optional)
+                if (event.target.classList.contains('marker')) return;
+
+                // Get SVG coordinates relative to the group element (accounting for zoom)
+                // d3.pointer returns [x, y] relative to the target, but we need it relative to the logical map
+                // We use projection.invert, but first we need the transform-adjusted coordinates.
+                
+                // Simple way: d3.pointer gives coords relative to the SVG container. 
+                // We need to transform them back to the original un-zoomed space to invert the projection.
+                const transform = d3.zoomTransform(svg.node());
+                const [x, y] = d3.pointer(event, svg.node());
+                
+                // Apply inverse zoom transform to get raw pixel coordinates
+                const rawX = (x - transform.x) / transform.k;
+                const rawY = (y - transform.y) / transform.k;
+
+                // Get Lat/Lon from projection
+                const coords = projection.invert([rawX, rawY]);
+                if (!coords) return; // Clicked outside projection bounds
+                
+                const [lon, lat] = coords;
+
+                // Update UI
+                placeMarker(rawX, rawY, transform.k);
+                showOffcanvas(lat, lon);
+            });
+
+            // Helper: Place visual marker
+            function placeMarker(x, y, zoomScale) {
+                // Remove existing marker
+                g.selectAll(".marker").remove();
+
+                // Add new marker (Circle)
+                g.append("circle")
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("r", 8 / zoomScale) // Start with correct scale
+                    .attr("class", "marker");
+            }
+
+            // Helper: Show Bootstrap Offcanvas
+            const bsOffcanvas = new bootstrap.Offcanvas('#locationOffcanvas');
+            
+            function showOffcanvas(lat, lon) {
+                // jQuery Update DOM
+                $('#lat-val').val(lat.toFixed(4));
+                $('#lon-val').val(lon.toFixed(4));
+                
+                // Show Sidebar
+                bsOffcanvas.show();
+            }
+
+            // Button to remove marker
+            $('#clear-marker').on('click', function() {
+                g.selectAll(".marker").remove();
+                bsOffcanvas.hide();
+            });
+
+            // Handle Window Resize
+            window.addEventListener('resize', () => {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                container.select("svg").attr("width", w).attr("height", h);
+                // Note: Updating projection on resize is complex with zoom state, 
+                // simple resize just expands the view area here.
+            });
+        });
+    </script>
+</body>
+</html>
