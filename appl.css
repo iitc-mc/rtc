@@ -1,0 +1,70 @@
+body,
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #aaddf0;
+}
+
+#map-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.country {
+    fill: #e8e3d3;
+    stroke: #999;
+    stroke-width: 0.5px;
+    vector-effect: non-scaling-stroke;
+    cursor: crosshair;
+    transition: fill 0.2s;
+}
+
+.country:hover {
+    fill: #dcd6c0;
+}
+
+.marker {
+    fill: #dc3545;
+    cursor: pointer;
+}
+
+@keyframes dropIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.info-hint {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    pointer-events: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.offcanvas.offcanvas-fullscreen {
+    --bs-offcanvas-width: 100vw;
+    --bs-offcanvas-height: 100vh;
+    max-width: 100%;
+}
