@@ -94,8 +94,6 @@ var areaChart = {
 
     init: function () {
 
-        google.charts.load("current", { packages: ["corechart"] });
-
         google.charts.setOnLoadCallback(() => {
 
             this.chart = new google.visualization.AreaChart(
