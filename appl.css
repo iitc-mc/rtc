@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web);
+
 body,
 html {
     height: 100%;
@@ -6,6 +8,17 @@ html {
     padding: 0;
     overflow: hidden;
     background-color: #aaddf0;
+}
+
+body {
+    font-family: "Titillium Web", Calibri, Helvetica, sans-serif;
+}
+
+.hddn {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    display: none;
 }
 
 #map-container {

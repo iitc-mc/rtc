@@ -92,21 +92,37 @@ var msgbox = {
 var areaChart = {
 
     chart: null,
-    options: null,
+    baseOptions: null,
 
     init: function () {
 
+        google.charts.load("current", { packages: ["corechart"] });
+
         google.charts.setOnLoadCallback(() => {
 
-            this.chart = new google.visualization.AreaChart(
+            this.chart = new google.visualization.ComboChart(
                 document.getElementById("chart-container")
             );
 
-            this.options = {
+            // Base options (series + colors injected dynamically)
+
+            this.baseOptions = {
 
                 isStacked: true,
                 areaOpacity: 0.85,
-                curveType: "function",
+                // curveType: "function",
+
+                backgroundColor: {
+                    fill: "transparent"
+                },
+
+                tooltip: {
+                    textStyle: {
+                        fontName: "Titillium Web",
+                        bold: false,
+                        italic: false
+                    }
+                },
 
                 legend: {
                     position: "top",
@@ -117,13 +133,33 @@ var areaChart = {
                     title: "Hour",
                     format: "0",
                     gridlines: { count: 24 },
-                    minorGridlines: { count: 0 }
+                    minorGridlines: { count: 0 },
+                    textStyle: {
+                        fontName: "Titillium Web",
+                        bold: false,
+                        italic: false
+                    },
+                    titleTextStyle: {
+                        fontName: "Titillium Web",
+                        bold: false,
+                        italic: false
+                    }
                 },
 
                 vAxis: {
                     title: "Power",
                     baseline: 0,
-                    gridlines: { color: "#e0e0e0" }
+                    gridlines: { color: "#e0e0e0" },
+                    textStyle: {
+                        fontName: "Titillium Web",
+                        bold: false,
+                        italic: false
+                    },
+                    titleTextStyle: {
+                        fontName: "Titillium Web",
+                        bold: false,
+                        italic: false
+                    }
                 },
 
                 chartArea: {
@@ -133,15 +169,7 @@ var areaChart = {
                     bottom: 60,
                     width: "100%",
                     height: "100%"
-                },
-
-                // Tableau-inspired palette
-                colors: [
-                    "#59A14F", // BESS (storage, bidirectional)
-                    "#4E79A7", // Wind
-                    "#F2BE4A", // Solar
-                    "#D62728"  // NSPO (danger / non-supplied power)
-                ]
+                }
 
             };
 
@@ -149,35 +177,126 @@ var areaChart = {
 
     },
 
+    clear: function () {
+
+        if (!this.chart) return;
+
+        var emptyTable = google.visualization.arrayToDataTable([
+            ["Hour", "No Data"],
+            [0, 0]
+        ]);
+
+        this.chart.draw(emptyTable, this.baseOptions);
+
+        jQuery("#chart-container").addClass("hddn");
+
+    },
+
     plot: function (uc) {
 
         if (!this.chart || !uc) return;
 
-        var table = [
-            ["Hour", "BESS", "Wind", "Solar", "NSPO"]
+        var n = uc.hour.length;
+
+        // --- Define candidate series (order matters) ---
+
+        var candidates = [
+
+            {
+                key: "bess_dis",
+                label: "BESS Discharge",
+                values: uc.bess.map(v => Math.max(v || 0, 0)),
+                type: "area",
+                color: "#59A14F"
+            },
+
+            {
+                key: "bess_chg",
+                label: "BESS Charge",
+                values: uc.bess.map(v => Math.min(v || 0, 0)),
+                type: "line",
+                color: "#2E7D32",
+                lineWidth: 2
+            },
+
+            {
+                key: "wind",
+                label: "Wind",
+                values: uc.wind.map(v => v || 0),
+                type: "area",
+                color: "#4E79A7"
+            },
+
+            {
+                key: "solr",
+                label: "Solar",
+                values: uc.solr.map(v => v || 0),
+                type: "area",
+                color: "#F2BE4A"
+            },
+
+            {
+                key: "nspo",
+                label: "Non-Supplied Power",
+                values: uc.nspo.map(v => v || 0),
+                type: "area",
+                color: "#E15759"
+            }
+
         ];
 
-        var n = Math.min(
-            uc.hour.length,
-            uc.bess.length,
-            uc.wind.length,
-            uc.solr.length,
-            uc.nspo.length
+        // --- Keep only non-zero series ---
+
+        var active = candidates.filter(s =>
+            s.values.some(v => Math.abs(v) > 1e-9)
         );
 
+        // Fallback if everything is zero
+        if (active.length === 0) {
+            this.clear();
+            return;
+        }
+
+        // --- Build DataTable ---
+
+        var header = ["Hour"].concat(active.map(s => s.label));
+        var table = [header];
+
         for (var i = 0; i < n; i++) {
-            table.push([
-                Number(uc.hour[i]),
-                uc.bess[i] || 0,
-                uc.wind[i] || 0,
-                uc.solr[i] || 0,
-                uc.nspo[i] || 0
-            ]);
+
+            var row = [uc.hour[i]];
+
+            for (var j = 0; j < active.length; j++) {
+                row.push(active[j].values[i]);
+            }
+
+            table.push(row);
+
         }
 
         var dataTable = google.visualization.arrayToDataTable(table);
 
-        this.chart.draw(dataTable, this.options);
+        // --- Build dynamic options ---
+
+        var options = Object.assign({}, this.baseOptions);
+
+        options.series = {};
+        options.colors = [];
+
+        active.forEach((s, idx) => {
+
+            options.series[idx] = {
+                type: s.type,
+                lineWidth: s.lineWidth || undefined
+            };
+
+            options.colors.push(s.color);
+
+        });
+
+        jQuery("#chart-container").removeClass("hddn");
+
+        this.chart.draw(dataTable, options);
 
     }
 
@@ -369,6 +488,8 @@ google.charts.setOnLoadCallback(function () {
             restoreApiKey("ieso");
 
             jQuery("#offcanvas").find(".get_data_btn").prop("disabled", true);
+
+            areaChart.clear();
 
             jQuery("#offcanvas").find(".scrollable").scrollTop(0);
 
