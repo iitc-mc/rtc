@@ -1,6 +1,8 @@
 
 // Global site coordinates
 
+var server_data = {};
+
 var MARKER_RADIUS_PX = 12;
 
 var currentLat = null,
@@ -727,6 +729,8 @@ google.charts.setOnLoadCallback(function () {
                         }
     
                         */
+
+                        server_data = response.data;
 
                         data_toUI(response.data);
 
