@@ -280,7 +280,9 @@ jQuery(document).ready(function () {
 
     jQuery("#offcanvas").on("hidden.bs.offcanvas", function () {
 
-        g.selectAll(".marker").remove();
+        setTimeout(function () {
+            g.selectAll(".marker").remove();
+        }, 1000);
 
     });
 
