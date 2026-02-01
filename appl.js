@@ -104,7 +104,7 @@ var areaChart = {
 
                 isStacked: true,
                 areaOpacity: 0.85,
-                curveType: "function",   // smooth areas slightly
+                curveType: "function",
 
                 legend: {
                     position: "top",
@@ -114,7 +114,7 @@ var areaChart = {
                 hAxis: {
                     title: "Hour",
                     format: "0",
-                    gridlines: { count: 24 },   // integer hour ticks
+                    gridlines: { count: 24 },
                     minorGridlines: { count: 0 }
                 },
 
@@ -133,13 +133,14 @@ var areaChart = {
                     height: "100%"
                 },
 
-                // Tableau-style palette
-
+                // Tableau-inspired palette
                 colors: [
-                    "#E15759", // BESS
+                    "#59A14F", // BESS (storage, bidirectional)
                     "#4E79A7", // Wind
-                    "#F2BE4A"  // Solar
+                    "#F2BE4A", // Solar
+                    "#D62728"  // NSPO (danger / non-supplied power)
                 ]
+
             };
 
         });
@@ -148,27 +149,31 @@ var areaChart = {
 
     plot: function (uc) {
 
-        // uc = unit_commitment object from backend
-
         if (!this.chart || !uc) return;
 
         var table = [
-            ["Hour", "BESS", "Wind", "Solar"]
+            ["Hour", "BESS", "Wind", "Solar", "NSPO"]
         ];
 
-        var n = uc.hour.length;
+        var n = Math.min(
+            uc.hour.length,
+            uc.bess.length,
+            uc.wind.length,
+            uc.solr.length,
+            uc.nspo.length
+        );
 
         for (var i = 0; i < n; i++) {
             table.push([
-                uc.hour[i],          // integer hour
-                uc.bess[i] || 0,     // BESS (+ / -)
-                uc.wind[i] || 0,     // Wind
-                uc.solr[i] || 0      // Solar
+                Number(uc.hour[i]),
+                uc.bess[i] || 0,
+                uc.wind[i] || 0,
+                uc.solr[i] || 0,
+                uc.nspo[i] || 0
             ]);
         }
 
-        var dataTable =
-            google.visualization.arrayToDataTable(table);
+        var dataTable = google.visualization.arrayToDataTable(table);
 
         this.chart.draw(dataTable, this.options);
 
@@ -717,6 +722,7 @@ google.charts.setOnLoadCallback(function () {
                                 "bess": [-1, +2, -3, ...],
                                 "wind": [1, 2, 3, ...],
                                 "solr": [1, 2, 3, ...],
+                                "nspo": [1, 2, 3, ...]
                             }
                         }
     
