@@ -873,13 +873,26 @@ google.charts.setOnLoadCallback(function () {
 
                 },
 
-                // Handle transport / network errors
+                // Handle transport/network errors
 
                 error: function (xhr, status, error) {
 
-                    var tx = error || status || "Network error";
+                    var tx = "Request failed";
+                
+                    // Try to extract server JSON message
 
-                    msgbox.failure("Request failed: " + tx);
+                    if (xhr && xhr.responseText) {
+                        try {
+                            var resp = JSON.parse(xhr.responseText);
+                            if (resp && resp.tx) {
+                                tx = resp.tx;
+                            }
+                        } catch (e) {
+                            // Ignore JSON parse errors
+                        }
+                    }
+                
+                    msgbox.failure(tx);
 
                 },
 
