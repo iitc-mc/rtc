@@ -509,6 +509,10 @@ google.charts.setOnLoadCallback(function () {
 
             restoreApiKey("ieso");
 
+            jQuery("#offcanvas").find(".repr_week").data("plot", "");
+            jQuery("#offcanvas").find(".repr_week").data("vmin", "");
+            jQuery("#offcanvas").find(".repr_week").data("vmax", "");
+
             areaChart.clear();
 
             jQuery("#offcanvas").find(".scrollable").scrollTop(0);
@@ -678,30 +682,36 @@ google.charts.setOnLoadCallback(function () {
 
             // Numeric fields
 
-            jQuery(".result.firm_solr").html(fmt(data.firm_solr, 2));
-            jQuery(".result.firm_wind").html(fmt(data.firm_wind, 2));
-            jQuery(".result.firm_bess").html(fmt(data.firm_bess, 2));
+            jQuery("#offcanvas").find(".firm_solr").html(fmt(data.firm_solr, 2));
+            jQuery("#offcanvas").find(".firm_wind").html(fmt(data.firm_wind, 2));
+            jQuery("#offcanvas").find(".firm_bess").html(fmt(data.firm_bess, 2));
 
-            jQuery(".result.cost").html(fmt(data.cost, 2));
-            jQuery(".result.cost_lcoe").html(fmt(data.cost_lcoe, 2));
-            jQuery(".result.cost_firm").html(fmt(data.cost_firm, 2));
+            jQuery("#offcanvas").find(".cost").html(fmt(data.cost, 2));
+            jQuery("#offcanvas").find(".cost_lcoe").html(fmt(data.cost_lcoe, 2));
+            jQuery("#offcanvas").find(".cost_firm").html(fmt(data.cost_firm, 2));
 
-            jQuery(".result.cost_firm_solr").html(fmt(data.cost_firm_solr, 2));
-            jQuery(".result.cost_firm_wind").html(fmt(data.cost_firm_wind, 2));
-            jQuery(".result.cost_firm_bess").html(fmt(data.cost_firm_bess, 2));
+            jQuery("#offcanvas").find(".cost_firm_solr").html(fmt(data.cost_firm_solr, 2));
+            jQuery("#offcanvas").find(".cost_firm_wind").html(fmt(data.cost_firm_wind, 2));
+            jQuery("#offcanvas").find(".cost_firm_bess").html(fmt(data.cost_firm_bess, 2));
 
             // Update area chart
 
             var vmax = data.inst_solr + data.firm_solr + data.inst_wind + data.firm_wind,
                 vmin = - vmax;
 
-            /*
-            if (payload.bess.hStrg > 0) {
-                vmin = - (data.inst_bess + data.firm_bess) / payload.bess.hStrg;
-            }
-            */
-
             areaChart.plot(data.unit_commitment.uc_4380, vmin, vmax);
+
+            jQuery("#offcanvas").find(".uc_2190").data("plot", JSON.stringify(data.unit_commitment.uc_2190));
+            jQuery("#offcanvas").find(".uc_2190").data("vmin", vmin);
+            jQuery("#offcanvas").find(".uc_2190").data("vmax", vmax);
+
+            jQuery("#offcanvas").find(".uc_4380").data("plot", JSON.stringify(data.unit_commitment.uc_4380));
+            jQuery("#offcanvas").find(".uc_4380").data("vmin", vmin);
+            jQuery("#offcanvas").find(".uc_4380").data("vmax", vmax);
+
+            jQuery("#offcanvas").find(".uc_6570").data("plot", JSON.stringify(data.unit_commitment.uc_6570));
+            jQuery("#offcanvas").find(".uc_6570").data("vmin", vmin);
+            jQuery("#offcanvas").find(".uc_6570").data("vmax", vmax);
 
         }
 
