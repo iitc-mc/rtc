@@ -729,7 +729,7 @@ google.charts.setOnLoadCallback(function () {
 
             // Update area chart
 
-            areaChart.plot(data.unit_commitment);
+            areaChart.plot(data.unit_commitment.uc_4380);
 
         }
 
@@ -878,7 +878,7 @@ google.charts.setOnLoadCallback(function () {
                 error: function (xhr, status, error) {
 
                     var tx = "Request failed";
-                
+
                     // Try to extract server JSON message
 
                     if (xhr && xhr.responseText) {
@@ -891,7 +891,7 @@ google.charts.setOnLoadCallback(function () {
                             // Ignore JSON parse errors
                         }
                     }
-                
+
                     msgbox.failure(tx);
 
                 },
