@@ -682,6 +682,8 @@ google.charts.setOnLoadCallback(function () {
 
             // Numeric fields
 
+            jQuery("#offcanvas").find(".demand").html(fmt(data.demand, 0));
+
             jQuery("#offcanvas").find(".firm_solr").html(fmt(data.firm_solr, 2));
             jQuery("#offcanvas").find(".firm_wind").html(fmt(data.firm_wind, 2));
             jQuery("#offcanvas").find(".firm_bess").html(fmt(data.firm_bess, 2));
