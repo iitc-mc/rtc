@@ -158,7 +158,7 @@ var areaChart = {
                 vAxis: {
                     title: "Power",
                     baseline: 0,
-                    gridlines: { color: "#EFEFEF" },
+                    gridlines: { color: "#E0E0E0" },
                     textStyle: {
                         fontName: "Titillium Web",
                         fontSize: 12,
@@ -250,7 +250,7 @@ var areaChart = {
                 label: "Curtailment",
                 values: uc.curt.map(v => v || 0),
                 type: "area",
-                color: "#EFEFEF"
+                color: "#E0E0E0"
             },
 
             {
