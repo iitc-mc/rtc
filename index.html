@@ -29,7 +29,7 @@
         <div class="offcanvas offcanvas-end offcanvas-fullscreen" tabindex="-1" id="offcanvas">
             <div class="offcanvas-header" style="margin: 0; padding: 2rem;">
                 <h5 class="offcanvas-title text-secondary"></h5>
-                <button type="button" type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body" style="margin: 0; padding: 1rem; border-top: 1px solid #eee;">
                 <div class="scrollable" style="height: 100%; padding: 1rem; overflow-x: hidden; overflow-y: auto;">
@@ -44,18 +44,21 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="iCapa_solr" class="form-label">Installed Capacity - MW</label>
                                     <input type="number" class="form-control" id="iCapa_solr" value="100" data-expected="float" data-mini="0" data-maxi="1000" />
+                                    <div class="form-text">Capacity initially available before any optimisation or firming is applied.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="cCost_solr" class="form-label">CAPEX - USD per kW</label>
                                     <input type="number" class="form-control" id="cCost_solr" value="658" data-expected="float" data-mini="300" data-maxi="3000" />
+                                    <div class="form-text">Applies to both existing capacity and firming capacity added by the optimiser.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="oCost_t_cCost_solr" class="form-label">OPEX to CAPEX</label>
                                     <input type="number" class="form-control" id="oCost_t_cCost_solr" value="0.02" data-expected="float" data-mini="0.005" data-maxi="0.05" />
+                                    <div class="form-text">Annual operating and maintenance cost, expressed as a share of CAPEX.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -64,6 +67,7 @@
                                         <input class="form-check-input" type="checkbox" role="switch" id="fOpts_solr" checked>
                                         <label class="form-check-label" for="fOpts_solr">Firming Option</label>
                                     </div>
+                                    <div class="form-text">Allow the optimiser to add solar PV capacity.</div>
                                 </div>
                             </div>
                         </div>
@@ -77,18 +81,21 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="iCapa_wind" class="form-label">Installed Capacity - MW</label>
                                     <input type="number" class="form-control" id="iCapa_wind" value="0" data-expected="float" data-mini="0" data-maxi="1000" />
+                                    <div class="form-text">Capacity initially available before any optimisation or firming is applied.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="cCost_wind" class="form-label">CAPEX - USD per kW</label>
                                     <input type="number" class="form-control" id="cCost_wind" value="1034" data-expected="float" data-mini="600" data-maxi="6000" />
+                                    <div class="form-text">Applies to both existing capacity and firming capacity added by the optimiser.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="oCost_t_cCost_wind" class="form-label">OPEX to CAPEX</label>
                                     <input type="number" class="form-control" id="oCost_t_cCost_wind" value="0.03" data-expected="float" data-mini="0.005" data-maxi="0.05" />
+                                    <div class="form-text">Annual operating and maintenance cost, expressed as a share of CAPEX.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -97,6 +104,7 @@
                                         <input class="form-check-input" type="checkbox" role="switch" id="fOpts_wind" />
                                         <label class="form-check-label" for="fOpts_wind">Firming Option</label>
                                     </div>
+                                    <div class="form-text">Allow the optimiser to add wind capacity.</div>
                                 </div>
                             </div>
                         </div>
@@ -110,18 +118,21 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="iCapa_bess" class="form-label">Installed Capacity - MWh</label>
                                     <input type="number" class="form-control" id="iCapa_bess" value="0" data-expected="float" data-mini="0" data-maxi="12000" />
+                                    <div class="form-text">Capacity initially available before any optimisation or firming is applied.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="cCost_bess" class="form-label">CAPEX - USD per kWh</label>
                                     <input type="number" class="form-control" id="cCost_bess" value="171" data-expected="float" data-mini="50" data-maxi="500" />
+                                    <div class="form-text">Applies to both existing capacity and firming capacity added by the optimiser.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="oCost_t_cCost_bess" class="form-label">OPEX to CAPEX</label>
                                     <input type="number" class="form-control" id="oCost_t_cCost_bess" value="0.025" data-expected="float" data-mini="0.005" data-maxi="0.05" />
+                                    <div class="form-text">Annual operating and maintenance cost, expressed as a share of CAPEX.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -130,6 +141,7 @@
                                         <input class="form-check-input" type="checkbox" role="switch" id="fOpts_bess" checked>
                                         <label class="form-check-label" for="fOpts_bess">Firming Option</label>
                                     </div>
+                                    <div class="form-text">Allow the optimiser to add BESS capacity.</div>
                                 </div>
                             </div>
                         </div>
@@ -141,18 +153,21 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="shBOS_bess" class="form-label">BOS Share of CAPEX</label>
                                     <input type="number" class="form-control" id="shBOS_bess" value="0.3" data-expected="float" data-mini="0" data-maxi="0.5" />
+                                    <div class="form-text">Share of battery turnkey CAPEX attributed to balance-of-system (BOS) costs, assumed to be saved through co-location.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="hStrg_bess" class="form-label">Hours of Storage</label>
                                     <input type="number" class="form-control" id="hStrg_bess" value="4" data-expected="integer" data-mini="2" data-maxi="12" />
+                                    <div class="form-text">Nominal discharge duration of the battery system at rated power.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="rtEff_bess" class="form-label">Round-Trip Efficiency</label>
                                     <input type="number" class="form-control" id="rtEff_bess" value="0.9" data-expected="float" data-mini="0.75" data-maxi="0.95" />
+                                    <div class="form-text">Fraction of stored energy recovered after charging and discharging.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -171,24 +186,28 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="cDura" class="form-label">Construction Duration - Years</label>
                                     <input type="number" class="form-control" id="cDura" value="1" data-expected="integer" data-mini="1" data-maxi="5" />
+                                    <div class="form-text">Time required to build and commission the co-located project.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="oDura" class="form-label">Operation Duration - Years</label>
                                     <input type="number" class="form-control" id="oDura" value="20" data-expected="integer" data-mini="10" data-maxi="40" />
+                                    <div class="form-text">Economic lifetime over which costs and electricity delivery are evaluated.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="kCost" class="form-label">Discount Rate</label>
                                     <input type="number" class="form-control" id="kCost" value="0.05" data-expected="float" data-mini="0.01" data-maxi="0.2" />
+                                    <div class="form-text">Real weighted average cost of capital (WACC) used to annualise costs.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="rTarg" class="form-label">Reliability Target</label>
                                     <input type="number" class="form-control" id="rTarg" value="0.95" data-expected="float" data-mini="0.85" data-maxi="1" />
+                                    <div class="form-text">Share of total annual electricity demand met by renewable generation and storage.</div>
                                 </div>
                             </div>
                         </div>
@@ -202,12 +221,14 @@
                                 <div style="padding: 1.5rem;">
                                     <label for="ninj" class="form-label">Renewables.ninja API Key</label>
                                     <input type="text" class="form-control" id="ninj" value="" data-expected="text" />
+                                    <div class="form-text">API key used to retrieve hourly solar or wind generation profiles.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div style="padding: 1.5rem;">
                                     <label for="ieso" class="form-label">Linear Optimiser API Key</label>
                                     <input type="text" class="form-control" id="ieso" value="" data-expected="text" />
+                                    <div class="form-text">API key used to solve the project-level firming optimisation problem.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -219,11 +240,13 @@
                                     <div class="progress" role="progressbar">
                                         <div class="progress-bar bg-secondary" style="width: 0%;"></div>
                                     </div>
+                                    <div style="min-height: 0.75rem;"></div>
+                                    <div class="form-text">Typical runtime is 1-2 minutes, depending on system load.</div>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div style="padding: 1.5rem; text-align: center; color: #999;">
-                                    <div>Data retrieval and linear optimisation usually take a minute or two</div>
+                                <div style="padding: 1.5rem;">
+                                    <div class="form-text">Simulations are processed one at a time, on a first-come, first-served basis. If another simulation is in progress, you will need to wait and retry once it finishes.</div>
                                 </div>
                             </div>
                         </div>
@@ -235,6 +258,7 @@
                         <div class="row d-flex" style="background: #f6f6f6; border-radius: var(--bs-border-radius);">
                             <div class="col-md-12">
                                 <div style="padding: 1.5rem;">
+                                    <p class="text-muted">Least-cost configuration required to deliver firm renewable electricity at the selected reliability target.</p>
                                     <table class="table table-bordered table-striped table-sm">
                                         <thead class="table-light">
                                             <tr>
@@ -245,32 +269,58 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Firming Solar PV</td>
+                                                <td>
+                                                    Demand<br />
+                                                    <span class="form-text">The annual production volume of the existing, stand-alone generation assets is conserved.</span>
+                                                </td>
+                                                <td class="result demand"></td>
+                                                <td>MWh/Year</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Firming Solar PV<br />
+                                                    <span class="form-text">Additional capacity identified by the optimiser.</span>
+                                                </td>
                                                 <td class="result firm_solr"></td>
                                                 <td>MW</td>
                                             </tr>
                                             <tr>
-                                                <td>Firming Wind</td>
+                                                <td>
+                                                    Firming Wind<br />
+                                                    <span class="form-text">Additional capacity identified by the optimiser.</span>
+                                                </td>
                                                 <td class="result firm_wind"></td>
                                                 <td>MW</td>
                                             </tr>
                                             <tr>
-                                                <td>Firming BESS</td>
+                                                <td>
+                                                    Firming BESS<br />
+                                                    <span class="form-text">Additional capacity identified by the optimiser.</span>
+                                                </td>
                                                 <td class="result firm_bess"></td>
                                                 <td>MWh</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Firm LCOE</strong></td>
+                                                <td>
+                                                    <strong>Firm LCOE</strong><br />
+                                                    <span class="form-text">Cost of delivering reliable round-the-clock renewable electricity.</span>
+                                                </td>
                                                 <td><strong class="result cost"></strong></td>
                                                 <td><strong>USD/MWh</strong></td>
                                             </tr>
                                             <tr>
-                                                <td class="ps-4">LCOE</td>
+                                                <td class="ps-4">
+                                                    LCOE<br />
+                                                    <span class="form-text">Cost associated with the existing, stand-alone generation assets without firming.</span>
+                                                </td>
                                                 <td class="result cost_lcoe"></td>
                                                 <td>USD/MWh</td>
                                             </tr>
                                             <tr>
-                                                <td class="ps-4">Firming Markup</td>
+                                                <td class="ps-4">
+                                                    Firming Mark-up<br />
+                                                    <span class="form-text">Additional cost required to deliver round-the-clock renewable electricity compared with variable (unfirmed) generation.</span>
+                                                </td>
                                                 <td class="result cost_firm"></td>
                                                 <td>USD/MWh</td>
                                             </tr>
@@ -303,11 +353,9 @@
 
                         <div style="min-height: 1.5rem;"></div>
 
-                        <div style="text-align: center; color: #999;">
-                            <div>Weekly Unit Commitment - Early August</div>
-                        </div>
+                        <p class="text-center text-muted">The figure below illustrates the hourly supply profile of a co-located renewable generation and battery storage system during a representative summer week.</p>
 
-                        <div id="chart-container" style="height: 450px; width: 100%;"></div>
+                        <div id="chart-container" style="height: 300px; width: 100%;"></div>
 
                         <div style="min-height: 15rem;"></div>
 

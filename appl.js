@@ -119,6 +119,7 @@ var areaChart = {
                 tooltip: {
                     textStyle: {
                         fontName: "Titillium Web",
+                        fontSize: 12,
                         bold: false,
                         italic: false
                     }
@@ -126,7 +127,13 @@ var areaChart = {
 
                 legend: {
                     position: "top",
-                    alignment: "center"
+                    alignment: "center",
+                    textStyle: {
+                        fontName: "Titillium Web",
+                        fontSize: 12,
+                        bold: false,
+                        italic: false
+                    }
                 },
 
                 hAxis: {
@@ -136,11 +143,13 @@ var areaChart = {
                     minorGridlines: { count: 0 },
                     textStyle: {
                         fontName: "Titillium Web",
+                        fontSize: 12,
                         bold: false,
                         italic: false
                     },
                     titleTextStyle: {
                         fontName: "Titillium Web",
+                        fontSize: 12,
                         bold: false,
                         italic: false
                     }
@@ -152,11 +161,13 @@ var areaChart = {
                     gridlines: { color: "#e0e0e0" },
                     textStyle: {
                         fontName: "Titillium Web",
+                        fontSize: 12,
                         bold: false,
                         italic: false
                     },
                     titleTextStyle: {
                         fontName: "Titillium Web",
+                        fontSize: 12,
                         bold: false,
                         italic: false
                     }
