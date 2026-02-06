@@ -874,7 +874,7 @@ google.charts.setOnLoadCallback(function () {
 
                 error: function (xhr, status, error) {
 
-                    var tx = "Request failed";
+                    var tx = "Request failed. Are you connected?";
 
                     // Try to extract server JSON message
 
