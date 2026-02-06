@@ -214,20 +214,11 @@ var areaChart = {
         var candidates = [
 
             {
-                key: "bess_dis",
-                label: "BESS Discharge",
-                values: uc.bess.map(v => Math.max(v || 0, 0)),
+                key: "solr",
+                label: "Solar",
+                values: uc.solr.map(v => v || 0),
                 type: "area",
-                color: "#59A14F"
-            },
-
-            {
-                key: "bess_chg",
-                label: "BESS Charge",
-                values: uc.bess.map(v => Math.min(v || 0, 0)),
-                type: "line",
-                color: "#2E7D32",
-                lineWidth: 2
+                color: "#F2BE4A"
             },
 
             {
@@ -239,11 +230,11 @@ var areaChart = {
             },
 
             {
-                key: "solr",
-                label: "Solar",
-                values: uc.solr.map(v => v || 0),
+                key: "bess_dis",
+                label: "BESS Discharge",
+                values: uc.bess.map(v => Math.max(v || 0, 0)),
                 type: "area",
-                color: "#F2BE4A"
+                color: "#59A14F"
             },
 
             {
@@ -252,6 +243,23 @@ var areaChart = {
                 values: uc.nspo.map(v => v || 0),
                 type: "area",
                 color: "#E15759"
+            },
+
+            {
+                key: "curt",
+                label: "Curtailment",
+                values: uc.curt.map(v => v || 0),
+                type: "area",
+                color: "#CCCCCC"
+            },
+
+            {
+                key: "bess_chg",
+                label: "BESS Charge",
+                values: uc.bess.map(v => Math.min(v || 0, 0)),
+                type: "line",
+                color: "#2E7D32",
+                lineWidth: 2
             }
 
         ];
@@ -852,11 +860,14 @@ google.charts.setOnLoadCallback(function () {
                             "cost_firm_bess": ...,
                             "reliability": ...,
                             "unit_commitment": {
-                                "hour": [1, 2, 3, ...],
-                                "bess": [-1, +2, -3, ...],
-                                "wind": [1, 2, 3, ...],
-                                "solr": [1, 2, 3, ...],
-                                "nspo": [1, 2, 3, ...]
+                                "uc_4380": {
+                                    "hour": [1, 2, 3, ...],
+                                    "solr": [1, 2, 3, ...],
+                                    "wind": [1, 2, 3, ...],
+                                    "curt": [1, 2, 3, ...],
+                                    "bess": [-1, +2, -3, ...],
+                                    "nspo": [1, 2, 3, ...]
+                                }
                             }
                         }
     
