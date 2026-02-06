@@ -158,7 +158,7 @@ var areaChart = {
                 vAxis: {
                     title: "Power",
                     baseline: 0,
-                    gridlines: { color: "#e0e0e0" },
+                    gridlines: { color: "#E0E0E0" },
                     textStyle: {
                         fontName: "Titillium Web",
                         fontSize: 12,
@@ -203,7 +203,7 @@ var areaChart = {
 
     },
 
-    plot: function (uc) {
+    plot: function (uc, vmin, vmax) {
 
         if (!this.chart || !uc) return;
 
@@ -250,7 +250,7 @@ var areaChart = {
                 label: "Curtailment",
                 values: uc.curt.map(v => v || 0),
                 type: "area",
-                color: "#CCCCCC"
+                color: "#E0E0E0"
             },
 
             {
@@ -314,6 +314,11 @@ var areaChart = {
         });
 
         jQuery("#chart-container").removeClass("hddn");
+
+        options.vAxis.viewWindow = {
+            min: vmin,
+            max: vmax
+        };
 
         this.chart.draw(dataTable, options);
 
@@ -720,7 +725,7 @@ google.charts.setOnLoadCallback(function () {
 
         }
 
-        function data_toUI(data) {
+        function data_toUI(payload, data) {
 
             if (!data) return;
 
@@ -748,7 +753,14 @@ google.charts.setOnLoadCallback(function () {
 
             // Update area chart
 
-            areaChart.plot(data.unit_commitment.uc_4380);
+            var vmax = data.inst_solr + data.firm_solr + data.inst_wind + data.firm_wind,
+                vmin = - vmax;
+
+            if (payload.bess.hStrg > 0) {
+                vmin = - (data.inst_bess + data.firm_bess) / payload.bess.hStrg;
+            }
+
+            areaChart.plot(data.unit_commitment.uc_4380, vmin, vmax);
 
         }
 
@@ -875,7 +887,7 @@ google.charts.setOnLoadCallback(function () {
 
                         server_data = response.data;
 
-                        data_toUI(response.data);
+                        data_toUI(payload, response.data);
 
                         msgbox.success("Simulation completed successfully");
 
