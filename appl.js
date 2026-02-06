@@ -756,9 +756,11 @@ google.charts.setOnLoadCallback(function () {
             var vmax = data.inst_solr + data.firm_solr + data.inst_wind + data.firm_wind,
                 vmin = - vmax;
 
+            /*
             if (payload.bess.hStrg > 0) {
                 vmin = - (data.inst_bess + data.firm_bess) / payload.bess.hStrg;
             }
+            */
 
             areaChart.plot(data.unit_commitment.uc_4380, vmin, vmax);
 
