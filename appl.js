@@ -137,7 +137,7 @@ var areaChart = {
                 },
 
                 hAxis: {
-                    title: "Hour",
+                    title: "Hour of the Year",
                     format: "0",
                     gridlines: { count: 24 },
                     minorGridlines: { count: 0 },
@@ -156,7 +156,7 @@ var areaChart = {
                 },
 
                 vAxis: {
-                    title: "Power",
+                    title: "MWh",
                     baseline: 0,
                     gridlines: { color: "#E0E0E0" },
                     textStyle: {
@@ -193,13 +193,13 @@ var areaChart = {
         if (!this.chart) return;
 
         var emptyTable = google.visualization.arrayToDataTable([
-            ["Hour", "No Data"],
+            ["Hour", "Power"],
             [0, 0]
         ]);
 
         this.chart.draw(emptyTable, this.baseOptions);
 
-        jQuery("#chart-container").addClass("hddn");
+        // jQuery("#chart-container").addClass("hddn");
 
     },
 
@@ -313,7 +313,7 @@ var areaChart = {
 
         });
 
-        jQuery("#chart-container").removeClass("hddn");
+        // jQuery("#chart-container").removeClass("hddn");
 
         options.vAxis.viewWindow = {
             min: vmin,
