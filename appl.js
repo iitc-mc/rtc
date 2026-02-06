@@ -497,8 +497,6 @@ google.charts.setOnLoadCallback(function () {
 
             jQuery("#offcanvas").find(".result").empty();
 
-            jQuery("#offcanvas").find(".get_data_btn").attr("data-csv", "");
-
             // Update title
 
             jQuery("#offcanvas .offcanvas-title").html(
@@ -510,8 +508,6 @@ google.charts.setOnLoadCallback(function () {
             restoreApiKey("ninj");
 
             restoreApiKey("ieso");
-
-            jQuery("#offcanvas").find(".get_data_btn").prop("disabled", true);
 
             areaChart.clear();
 
@@ -676,55 +672,6 @@ google.charts.setOnLoadCallback(function () {
 
         // Run simulation
 
-        function data_toCSV(data) {
-
-            if (!data) return "";
-
-            var rows = [];
-
-            // Header
-
-            rows.push("Metric,Value");
-
-            // Ordered mapping: key → label
-
-            var map = [
-                ["inst_solr", "Installed Solar PV (MW)"],
-                ["firm_solr", "Firming Solar PV (MW)"],
-                ["inst_wind", "Installed Wind (MW)"],
-                ["firm_wind", "Firming Wind (MW)"],
-                ["firm_disp", "Firming Dispatchable (MW)"],
-                ["inst_bess", "Installed BESS (MWh)"],
-                ["firm_bess", "Firming BESS (MWh)"],
-                ["generation", "Annual Generation (MWh)"],
-                ["cost", "Firm LCOE (USD/MWh)"],
-                ["cost_lcoe", "LCOE (USD/MWh)"],
-                ["cost_firm", "Firming Markup (USD/MWh)"],
-                ["cost_firm_solr", "Firming Cost - Solar PV (USD/MWh)"],
-                ["cost_firm_wind", "Firming Cost - Wind (USD/MWh)"],
-                ["cost_firm_bess", "Firming Cost - BESS (USD/MWh)"],
-                ["reliability", "Reliability"]
-            ];
-
-            for (var i = 0; i < map.length; i++) {
-
-                var key = map[i][0];
-                var label = map[i][1];
-
-                if (typeof data[key] !== "undefined") {
-
-                    var value = data[key];
-
-                    rows.push(label + "," + fmt(value, 4));
-
-                }
-
-            }
-
-            return rows.join("\n");
-
-        }
-
         function data_toUI(payload, data) {
 
             if (!data) return;
@@ -742,14 +689,6 @@ google.charts.setOnLoadCallback(function () {
             jQuery(".result.cost_firm_solr").html(fmt(data.cost_firm_solr, 2));
             jQuery(".result.cost_firm_wind").html(fmt(data.cost_firm_wind, 2));
             jQuery(".result.cost_firm_bess").html(fmt(data.cost_firm_bess, 2));
-
-            // Button
-
-            jQuery("#summary_tabl").attr("data-csv", data_toCSV(data));
-
-            // Enable all buttons
-
-            jQuery("#offcanvas").find(".get_data_btn").prop("disabled", false);
 
             // Update area chart
 
@@ -939,22 +878,6 @@ google.charts.setOnLoadCallback(function () {
                 }
 
             });
-
-        });
-
-        jQuery(".get_data_btn").on("click", function () {
-
-            var csv = jQuery(this).attr("data-csv");
-
-            if (!csv) {
-                return;
-            }
-
-            var blob = new Blob([csv], {
-                type: "text/csv;charset=utf-8"
-            });
-
-            saveAs(blob, "data.csv");
 
         });
 
