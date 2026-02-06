@@ -701,17 +701,29 @@ google.charts.setOnLoadCallback(function () {
 
             areaChart.plot(data.unit_commitment.uc_4380, vmin, vmax);
 
-            jQuery("#offcanvas").find(".uc_2190").data("plot", JSON.stringify(data.unit_commitment.uc_2190));
-            jQuery("#offcanvas").find(".uc_2190").data("vmin", vmin);
-            jQuery("#offcanvas").find(".uc_2190").data("vmax", vmax);
+            jQuery(".uc_0").data({
+                plot: data.unit_commitment.uc_0,
+                vmin: vmin,
+                vmax: vmax
+            });
 
-            jQuery("#offcanvas").find(".uc_4380").data("plot", JSON.stringify(data.unit_commitment.uc_4380));
-            jQuery("#offcanvas").find(".uc_4380").data("vmin", vmin);
-            jQuery("#offcanvas").find(".uc_4380").data("vmax", vmax);
+            jQuery(".uc_2190").data({
+                plot: data.unit_commitment.uc_2190,
+                vmin: vmin,
+                vmax: vmax
+            });
 
-            jQuery("#offcanvas").find(".uc_6570").data("plot", JSON.stringify(data.unit_commitment.uc_6570));
-            jQuery("#offcanvas").find(".uc_6570").data("vmin", vmin);
-            jQuery("#offcanvas").find(".uc_6570").data("vmax", vmax);
+            jQuery(".uc_4380").data({
+                plot: data.unit_commitment.uc_4380,
+                vmin: vmin,
+                vmax: vmax
+            });
+
+            jQuery(".uc_6570").data({
+                plot: data.unit_commitment.uc_6570,
+                vmin: vmin,
+                vmax: vmax
+            });
 
         }
 
@@ -888,6 +900,20 @@ google.charts.setOnLoadCallback(function () {
                 }
 
             });
+
+        });
+
+        jQuery(".repr_week").on("click", function (e) {
+
+            e.preventDefault();
+
+            const plot = jQuery(this).data("plot");
+            const vmin = jQuery(this).data("vmin");
+            const vmax = jQuery(this).data("vmax");
+
+            if (!plot) return;
+
+            areaChart.plot(plot, vmin, vmax);
 
         });
 
